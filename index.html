@@ -267,7 +267,7 @@
                         <option value="E">E</option>
                     </select>
                     <input aria-label="task name" name="taskName" value="" placeholder="What's the task?" />
-                    <button aria-label="Delete Task" name="delete">×</button>
+                    <button aria-label="Delete Task" name="delete" type="reset">×</button>
                 </form>
             </li>
         </template>
@@ -354,6 +354,7 @@
                     tasks.splice(index, 1);
                     renderTasks();
                     persistTask();
+
                 })
             });
             firstRender = false;
