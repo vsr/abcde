@@ -123,7 +123,7 @@
             display: flex;
             justify-content: space-between;
             opacity: 1;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
         }
 
         .task-flex-row select,
@@ -318,10 +318,14 @@
     <button onclick="document.querySelector('.app-info').classList.toggle('hidden')" class="info-toggle-button"
         aria-label="Toggle information section" title="Toggle information section">i</button>
     <script>
+        let firstRender = true;
         function renderTasks() {
             const template = document.querySelector('#task-template');
             const taskList = document.querySelector('.task-list');
             taskList.innerHTML = "";
+            if (tasks.length === 0) {
+                taskList.innerHTML = "No tasks to show. Add some.";
+            }
             tasks.sort((a, b) => a.classification.charCodeAt(0) - b.classification.charCodeAt(0));
             tasks.forEach((task, index) => {
                 const node = template.content.cloneNode(true);
@@ -330,6 +334,12 @@
                 form.taskName.value = task.taskName;
                 form.taskClassification.value = task.classification;
                 taskList.appendChild(node);
+                if (firstRender) {
+                    form.style.transform = 'translateX(120vw)';
+                    setTimeout(() => {
+                        form.style.transform = 'translateX(0)';
+                    }, 200 * index);
+                }
                 form.taskName.addEventListener('change', function (ev) {
                     task.taskName = ev.target.value;
                     persistTask();
@@ -346,6 +356,7 @@
                     persistTask();
                 })
             });
+            firstRender = false;
         }
         function persistTask() {
             window.localStorage && window.localStorage.setItem('tasks', JSON.stringify(tasks));
