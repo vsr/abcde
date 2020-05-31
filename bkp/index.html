@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABCDE - Task Prioritization</title>
+    <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link href="tailwind.min.css" rel="stylesheet">
+    <script src="abcde.js"></script>
+    <!-- <style>
+        :root {
+            --bg-color: #fff;
+            --color: #333;
+            --app-max-width: 28rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: var(--app-max-width);
+            margin: 0 auto;
+            background-color: #fff;
+            height: 100vh;
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0px;
+            background: #505050;
+            max-width: var(--app-max-width);
+            width: 100%;
+        }
+
+        .page-footer {
+            color: #4f4f4f;
+            background-color: #f9f9f9;
+            padding: 0.5em;
+            border-top: 1px solid #eee;
+        }
+
+        .page-footer ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            width: var(--app-max-width);
+            display: flex;
+        }
+
+        .page-footer li {
+            margin-right: 1em;
+            font-size: 0.9em;
+        }
+
+        .add-task-form {
+            background-color: #f7f7f7;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 0.25em 0.25em 1em;
+        }
+
+        input[name="taskName"] {
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid rgba(209, 209, 209, 0.75);
+            font-size: 1rem;
+            outline: 0;
+            padding: 0.5rem;
+            border-radius: 3px;
+            margin: 0.25rem;
+        }
+
+        .priority-button-group {
+            display: flex;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .priority-button {
+            width: 2.5em;
+            text-align: center;
+            background: #cccccc;
+            padding: 0.25em 0.5em;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            border-right: 1px solid #aaa;
+        }
+
+        .priority-button:last-child {
+            border: none;
+        }
+
+        .priority-button input[type="radio"] {
+            transform: translateX(100vw);
+            width: 0px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .priority-button--selected {
+            background: #ffffff;
+        }
+
+        .add-task-button {
+            border-radius: 3px;
+            padding: 0 1em;
+            font-size: 0.9em;
+            background-color: #343434;
+            border: none;
+            color: #eee;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.3s;
+        }
+
+        .task-list-container {
+            height: 100vh;
+            width: 100%;
+            overflow-y: scroll;
+        }
+
+        .task-list {
+            margin-bottom: 6rem;
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .task-list li {
+            position: relative;
+            min-height: 7rem;
+            transition: all 0.3s ease-out;
+        }
+
+        .task-list li.editing {
+            transform: translateX(-100%);
+        }
+
+        .task-list li form,
+        .task-list li article {
+            display: flex;
+            width: 100%;
+            padding: 1em;
+        }
+
+        .task-list li form {
+            position: absolute;
+            left: 100%;
+
+        }
+
+        .task-list li article {
+            left: 0;
+            position: absolute;
+        }
+
+        article .task-name {
+            flex-grow: 1;
+        }
+    </style> -->
+    <style>
+        .editing {
+            transform: translateX(-100%);
+        }
+
+        .task-row {
+            height: 6rem;
+            transition: all 0.3s ease-out;
+        }
+
+        .task-row.editing {
+            /* height: 8rem;*/
+        }
+
+        abcde-form {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container max-w-lg mx-auto relative h-screen overflow-hidden" role="none">
+
+        <abcde-form></abcde-form>
+        <!--
+        <div role="none" class="task-list-container h-screen overflow-y-auto pb-48 bg-white">
+            <ol class="task-list w-full overflow-hidden"></ol>
+            <p class="empty-state-message my-10 mx-5 text-3xl">No tasks to show. <br />Start by add your tasks.</p>
+        </div>
+
+        <div class="bottom-bar fixed bottom-0 w-full max-w-lg mx-auto bg-gray-400" role="none">
+            <form name="add-form" onsubmit="return false;" class="add-task-form p-2">
+                <input required aria-label="task name" name="taskName" value=""
+                    class="bg-white rounded shadow p-2 w-full" placeholder="What's the task?" />
+                <div class="flex justify-between my-2" role="none">
+                    <div class="priority-button-group bg-white flex rounded-md overflow-hidden" role="group">
+                        <label class="priority-button px-4 py-2  cursor-pointer">
+                            A
+                            <input class="hidden" aria-label="Select priority A" type="radio" value="A"
+                                name="taskPriority" />
+                        </label>
+                        <label class="priority-button  px-4 py-2 cursor-pointer">
+                            B
+                            <input class="hidden" aria-label="Select priority B" type="radio" value="B"
+                                name="taskPriority" />
+                        </label>
+                        <label class="priority-button  px-4 py-2 cursor-pointer">
+                            C
+                            <input class="hidden" aria-label="Select priority C" type="radio" value="C"
+                                name="taskPriority" />
+                        </label>
+                        <label class="priority-button  px-4 py-2 cursor-pointer">
+                            D
+                            <input class="hidden" aria-label="Select priority D" type="radio" value="D"
+                                name="taskPriority" />
+                        </label>
+                        <label class="priority-button  px-4 py-2 cursor-pointer">
+                            E
+                            <input class="hidden" aria-label="Select priority E" type="radio" value="E"
+                                name="taskPriority" />
+                        </label>
+                    </div>
+                    <button class="add-task-button px-4 py-2 bg-gray-800 text-white rounded-md" type="submit">Add
+                        Task</button>
+                </div>
+            </form>
+
+            <footer class="page-footer bg-gray-300 text-sm">
+                <abcde-form></abcde-form>
+                <nav>
+                    <ul class="flex ">
+                        <li class="px-4 py-2"><a>About</a></li>
+                        <li class="px-4 py-2"><a>Legend</a></li>
+                    </ul>
+                </nav>
+            </footer>
+            <template id="task-template" hidden>
+                <li class="task-row relative px-2 py-0 transition-transform duration-500 ease-in-out hover:bg-gray-100">
+                    <article class="absolute w-full p-2">
+                        <p class="task-name text-2xl px-2 py-0 text-gray-700"></p>
+                        <div class="flex justify-between">
+                            <span class="task-priority text-gray-600  p-0"></span>
+                            <span class="py-0 px-1 ">
+                                <button
+                                    class="edit-task rounded bg-gray-900 text-white shadow text-xs py-0 px-2">edit</button>
+                            </span>
+                        </div>
+                    </article>
+                    <form onsubmit="return false;" class="task-flex-row absolute p-2 w-full" style="left: 100%">
+
+                        <input required aria-label="task name" name="taskName" value=""
+                            class="bg-white rounded shadow p-2 w-full" placeholder="What's the task?" />
+                        <div class="flex justify-between my-2" role="none">
+                            <div class="priority-button-group bg-white flex rounded-md overflow-hidden" role="group">
+                                <label class="priority-button px-4 py-2  cursor-pointer">
+                                    A
+                                    <input class="hidden" aria-label="Select priority A" type="radio" value="A"
+                                        name="taskPriority" />
+                                </label>
+                                <label class="priority-button  px-4 py-2 cursor-pointer">
+                                    B
+                                    <input class="hidden" aria-label="Select priority B" type="radio" value="B"
+                                        name="taskPriority" />
+                                </label>
+                                <label class="priority-button  px-4 py-2 cursor-pointer">
+                                    C
+                                    <input class="hidden" aria-label="Select priority C" type="radio" value="C"
+                                        name="taskPriority" />
+                                </label>
+                                <label class="priority-button  px-4 py-2 cursor-pointer">
+                                    D
+                                    <input class="hidden" aria-label="Select priority D" type="radio" value="D"
+                                        name="taskPriority" />
+                                </label>
+                                <label class="priority-button  px-4 py-2 cursor-pointer">
+                                    E
+                                    <input class="hidden" aria-label="Select priority E" type="radio" value="E"
+                                        name="taskPriority" />
+                                </label>
+                            </div>
+                            <div>
+                                <button class="py-1 px-2 rounded bg-gray-900 text-white shadow text-xs"
+                                    aria-label="Delete Task" name="delete" type="reset">delete</button>
+                                <button class="py-1 px-2 rounded bg-gray-900 text-white shadow text-xs"
+                                    aria-label="done" name="done" type="reset">done</button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </template>
+        </div> -->
+    </div>
+</body>
+
+</html>
