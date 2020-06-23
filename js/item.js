@@ -2,15 +2,14 @@ class AbcdeItem extends HTMLElement {
   static get template() {
     return `
         <style>
+
         li {
-            min-height: 6rem;
-            transition: height 0.3s ease-out;
+             transition: height 0.3s ease-out;
         }
         .editing li {
-            min-height: 7rem;
         }
         article, abcde-form {
-            transition: all 0.3s ease-out;
+            // transition: all 0.3s ease-out;
         }
         article {
             top: 0;
@@ -26,8 +25,8 @@ class AbcdeItem extends HTMLElement {
         }
 
         </style>
-      <li class="task-row relative px-2 py-0 transition-transform duration-500 ease-in-out hover:bg-gray-100">
-            <article class="absolute w-full p-2">
+      <li class="task-row relative overflow-hidden px-2 py-0 hover:bg-gray-100 h-32">
+            <article class="absolute w-full p-2 bg-blue-200 h-16">
                 <p class="task-name text-2xl px-2 py-0 text-gray-700"></p>
                 <div class="flex justify-between">
                     <span class="task-priority text-gray-600 p-0"></span>
@@ -36,7 +35,7 @@ class AbcdeItem extends HTMLElement {
                     </span>
                 </div>
             </article>
-            <abcde-form class="absolute w-full p-2"></abcde-form>
+            <abcde-form class="absolute w-full p-2 bg-green-200 h-32"></abcde-form>
         </li>
         `;
   }
@@ -77,6 +76,18 @@ class AbcdeItem extends HTMLElement {
       this.classList.remove("editing");
     }
   }
+  get onSave() {
+    return this._onSave || (() => {});
+  }
+  set onSave(fn) {
+    this._onSave = fn;
+  }
+  get onDelete() {
+    return this._onDelete || (() => {});
+  }
+  set onDelete(fn) {
+    this._onDelete = fn;
+  }
   connectedCallback() {
     this.innerHTML = this.constructor.template;
     this.updateDomValues();
@@ -94,6 +105,14 @@ class AbcdeItem extends HTMLElement {
     this.querySelector("article .edit-task").removeEventListener(
       "click",
       this.toggleEdit
+    );
+    this.querySelector("abcde-form").removeEventListener(
+      "submit",
+      this.itemSave
+    );
+    this.querySelector("abcde-form").removeEventListener(
+      "delete",
+      this.itemDelete
     );
   }
   attributeChangedCallback(name, oldValue, newValue) {
@@ -123,6 +142,12 @@ class AbcdeItem extends HTMLElement {
     this.priority = ev.detail.priority;
     this.updateDomValues();
     this.toggleEdit();
+    this.dispatchEvent(
+      new CustomEvent("save", {
+        detail: { text: this.text, priority: this.priority },
+      })
+    );
+    this.onSave();
   }
   itemDelete(ev) {
     console.log("delete item", ev);
@@ -131,6 +156,7 @@ class AbcdeItem extends HTMLElement {
         detail: {},
       })
     );
+    this.onDelete();
   }
 }
 

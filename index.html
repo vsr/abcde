@@ -12,14 +12,11 @@
 <body class="bg-gray-100">
     <div class="container max-w-lg mx-auto relative h-screen overflow-hidden" role="none">
         <div role="none" class="task-list-container h-screen overflow-y-auto pb-48 bg-white">
-            <ol class="task-list w-full overflow-hidden">
-                <abcde-item text="hello" priority="C"></abcde-item>
-            </ol>
-            <p class="empty-state-message my-10 mx-5 text-3xl">No tasks to show. <br />Start by adding your tasks.</p>
+            <abcde-list id="list"></abcde-list>
         </div>
         <div class="bottom-bar fixed bottom-0 w-full max-w-lg mx-auto bg-gray-400" role="none">
-            <abcde-form id="#main-task-form"></abcde-form>
-            <footer class="page-footer bg-gray-300 text-sm">
+            <abcde-form id="main-task-form"></abcde-form>
+            <footer class="page-footer bg-gray-300 text-sm h-8">
                 <nav>
                     <ul class="flex ">
                         <li class="px-4 py-2"><a>About</a></li>
@@ -70,12 +67,10 @@
             </div>
         </form>
     </template>
-    <template id="abcde-item-template">
-
-    </template>
     <script src="js/form.js"></script>
     <script src="js/item.js"></script>
     <script src="js/list.js"></script>
+    <script src="js/ts.js"></script>
     <script src="js/index.js"></script>
 </body>
 
